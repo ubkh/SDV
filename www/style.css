@@ -1,0 +1,192 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    color: #333;
+}
+
+.controls {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.control-group label {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+select, input[type="range"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#yearSlider {
+    width: 150px;
+    vertical-align: middle; /* Align slider nicely with label */
+}
+
+.visualization-container {
+    width: 95%;
+    max-width: 1000px; /* Limit overall width */
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+#map {
+    background-color: #e9e9e9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.borough {
+    fill: #ddd; /* Lighter background for boroughs */
+    stroke: #aaa;
+    stroke-width: 0.5px;
+}
+
+.bubble {
+    stroke: #333;
+    stroke-width: 1px;
+    cursor: pointer;
+    transition: stroke-width 0.2s ease, transform 0.2s ease; /* Smooth hover */
+}
+
+.borough-label {
+    font-size: 8px; /* Smaller labels */
+    text-anchor: middle;
+    fill: #444;
+    pointer-events: none; /* Labels don't block hover */
+    font-weight: bold;
+    text-shadow: 0 0 2px white, 0 0 2px white; /* Make labels readable */
+}
+
+.tooltip {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    white-space: nowrap;
+}
+
+.legend-item text {
+    font-size: 11px;
+    alignment-baseline: middle;
+}
+
+.legend-title {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.legend-container {
+    stroke-width: 1px;
+}
+
+/* New container for insights and data processing */
+.insights-container {
+    width: 95%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.insights {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: #555;
+    width: 100%;
+}
+
+.insights h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.insights em {
+    color: #888;
+    font-size: 0.85em;
+}
+
+.data-processing-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: #555;
+    width: 100%;
+}
+
+.data-processing-box h2 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.data-processing-box h3 {
+    color: #444;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.data-content {
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+.data-content ul, .data-content ol {
+    padding-left: 20px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.data-content li {
+    margin-bottom: 5px;
+}
+
+.data-content code {
+    background-color: #f1f1f1;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: monospace;
+}
+
+.data-content a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.data-content a:hover {
+    text-decoration: underline;
+}
+
+/* Disabled state for crime filter */
+#crimeFilter:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+}

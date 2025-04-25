@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>London Crime & Deprivation Visualization</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson-client@3"></script>
+</head>
+<body>
+    <h1>London Crime & Deprivation Visualization</h1>
+
+    <div class="controls">
+        <div class="control-group">
+            <label for="dataFilter">View :</label>
+            <select id="dataFilter">
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="yearSlider">Year: <span id="yearDisplay">2021</span></label>
+            <input type="range" id="yearSlider" min="2018" max="2021" value="2021" step="1">
+        </div>
+    </div>
+
+    <div class="visualization-container">
+        <svg id="map" width="900" height="750"></svg>
+        <div id="tooltip" class="tooltip">
+            <strong id="tooltip-title">Borough Name</strong><br>
+            <span id="tooltip-value">Value: </span><br>
+            <span id="tooltip-deprivation">Deprivation: </span><br>
+            <span id="tooltip-year">Year: </span>
+        </div>
+    </div>
+    
+    <div class="insights-container">
+        <div class="insights">
+            <h2>Insights</h2>
+            <p>
+                This visualization explores crime distribution across London boroughs, with bubble size representing crime rates per capita. The interactive controls allow filtering by crime type and year to explore patterns over time and correlation with deprivation.
+            </p>
+            <p>
+                <em>Hover over bubbles for specific data. Use controls to change view.</em>
+            </p>
+        </div>
+        
+        <div class="data-processing-box">
+            <h2>Data Processing</h2>
+            <div class="data-content">
+                <h3>Data Processing Summary</h3>
+                <p>The data in this visualization has been automatically processed via a Python script. The pipeline integrates two distinct London datasets:</p>
+                <ol>
+                    <li>
+                        <strong>Deprivation Metrics</strong> (Indices of Deprivation 2019)
+                        <ul>
+                            <li>Contains ward-level deprivation statistics including:</li>
+                            <li>Population estimates</li>
+                            <li>IMD (Index of Multiple Deprivation) scores</li>
+                            <li>Income and Employment domain scores</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Crime Records</strong> (MPS Recorded Crime by Geographic Breakdown)
+                        <ul>
+                            <li>Contains monthly crime counts (2010-2025) with:</li>
+                            <li>Crime classification (major/minor categories)</li>
+                            <li>Geographic ward attribution</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Geographic Boundaries</strong> (Ordnance Survey Shapefiles)
+                        <ul>
+                            <li>Geospatial boundary data for London wards</li>
+                            <li>Converted to TopoJSON format for web visualization</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h3>Processing Steps:</h3>
+                <ol>
+                    <li>
+                        <strong>Data Integration</strong>
+                        <ul>
+                            <li>Ward deprivation metrics are merged with 15 years of crime records using spatial ward alignment</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Crime Rate Calculation</strong>
+                        <ul>
+                            <li>Annual per-capita crime rates computed using:</li>
+                            <li>Total crimes per ward (summed across all months/years)</li>
+                            <li>Official population estimates from deprivation data</li>
+                            <li>Formula: <code>(Total Crimes / Population) × 1000</code></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Crime Type Aggregation</strong>
+                        <ul>
+                            <li>Crimes aggregated to annual counts by:</li>
+                            <li>Major offense categories (e.g., "Violence Against the Person")</li>
+                            <li>Calendar year (2010-2025)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Boundary Processing with Mapshaper</strong>
+                        <ul>
+                            <li>Original Ordnance Survey Shapefiles processed using Mapshaper to:</li>
+                            <li>Simplify boundary geometries (reducing file size by ~80%)</li>
+                            <li>Convert from Shapefile to TopoJSON format</li>
+                            <li>TopoJSON chosen over GeoJSON for its topology preservation and significantly smaller file size</li>
+                            <li>Command used: <code>mapshaper london_wards.shp -simplify dp 10% -o format=topojson london_wards.json</code></li>
+                            <li>This preserves ward adjacency relationships while optimising for web delivery</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Data Validation</strong>
+                        <ul>
+                            <li>Excludes wards with:</li>
+                            <li>Missing population data</li>
+                            <li>Zero population values</li>
+                            <li>No matching crime records</li>
+                            <li>Handles division errors and missing values</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <p><strong>Output:</strong> Final dataset enables spatial-temporal analysis of deprivation indicators vs. crime patterns across London wards, with built-in data quality controls.</p>
+                
+                <p><strong>Data Sources:</strong></p>
+                <ul>
+                    <li><a href="https://data.london.gov.uk/dataset/indices-of-deprivation">Indices of Deprivation</a></li>
+                    <li><a href="https://data.london.gov.uk/dataset/recorded_crime_summary">Recorded Crime Statistics</a></li>
+                    <li><a href="https://www.ordnancesurvey.co.uk/business-government/products/boundaryline">Ordnance Survey Boundary Data</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
